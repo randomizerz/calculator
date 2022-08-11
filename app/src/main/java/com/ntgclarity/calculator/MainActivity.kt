@@ -3,11 +3,13 @@ package com.ntgclarity.calculator
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     private var isTypingNumber = true
     private var tvResult: TextView? = null
+    private val digitValidator = DigitValidator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +44,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun handleDigitClick(digit: Int) {
-        if (isTypingNumber) {
-            tvResult?.text = "${tvResult?.text}${digit}"
-        } else {
-            tvResult?.text = "${digit}"
+    private fun handleDigitClick(digit: Int) {
+        if (digitValidator.isValidDigit(digit)) {
+            if (isTypingNumber) {
+                tvResult?.text = "${tvResult?.text}${digit}"
+            } else {
+                tvResult?.text = "${digit}"
 
-            isTypingNumber = true
+                isTypingNumber = true
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.err_invalid_digit), Toast.LENGTH_SHORT).show()
         }
     }
 
